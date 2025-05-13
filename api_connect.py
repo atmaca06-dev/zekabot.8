@@ -1,22 +1,21 @@
+from dotenv import load_dotenv
 import os
-from openai import OpenAI
+import openai
 
+load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
+openai.api_key = api_key  # doğru tanım
 
-# GPT'ye mesaj gönder
 def send_to_gpt(mesaj):
     try:
-        response = client.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Sen Zekabot’un denetleyici yapay zekasısın. Görev sonuçlarına analiz et ve gerekli geri bildirimi ver."},
+                {"role": "system", "content": "Sen Zekabot’un denetleyici yapay zekasısın. Görev sonuçlarını analiz et ve gerekli geri bildirimi ver."},
                 {"role": "user", "content": mesaj}
             ]
         )
-        yanit = response.choices[0].message.content
-        print("GPT'den gelen yanıt:", yanit)
+        yanit = response["choices"][0]["message"]["content"]
         return yanit
     except Exception as e:
-        print("GPT bağlantı hatası:", str(e))
-        return "GPT bağlantı hatası"
+        return f"[Hata] GPT yanıtı alınamadı: {e}"
