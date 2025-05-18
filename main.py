@@ -19,7 +19,15 @@ def send_to_gpt(mesaj):
             messages=[
                 {"role": "system", "content": "Sen Zekabot'un kontrol motorusun. Gelen verileri analiz edip yorumla."},
                 {"role": "user", "content": mesaj}
+            @app.route("/webhook", methods=["POST"])
+    def webhook():
+    data = request.get_json()
+    gelen_mesaj = data.get("Body", "")
+    yanit = send_to_gpt(gelen_mesaj)
+    return jsonify({"reply": yanit})
+
             ]
+            
         )
         yanit = response["choices"][0]["message"]["content"]
         print("GPT'den gelen yanıt:", yanit)
@@ -45,3 +53,4 @@ def webhook():
 if __name__ == "__main__":
     threading.Thread(target=lambda: print("Zekabot Webhook Aktif")).start()
     app.run(host="0.0.0.0", port=10000)
+     
