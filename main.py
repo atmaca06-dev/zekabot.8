@@ -24,10 +24,10 @@ def send_to_gpt(mesaj):
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    data = request.get_json()
-    mesaj = data.get("Body") or data.get("message")
-    yanit = send_to_gpt(mesaj)
-    return jsonify({"reply": yanit})
+    gelen_mesaj = request.values.get("Body", "")
+    yanit = send_to_gpt(gelen_mesaj)
+    return yanit
+
 
 @app.route("/")
 def index():
