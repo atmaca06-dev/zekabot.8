@@ -48,12 +48,14 @@ def send_to_gpt(mesaj):
     except Exception as e:
         return f"[HATA] {str(e)}"
 
-# Twilio'dan gelen mesajı yakala
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    gelen_mesaj = request.values.get("Body", "")
-    yanit = send_to_gpt(gelen_mesaj)
-    return yanit
+    gelen_mesaj = request.form.get("Body")
+    if gelen_mesaj:
+        yanit = send_to_gpt(gelen_mesaj)
+        return yanit, 200
+    else:
+        return "No message received", 400
 
 # Basit test sayfası
 @app.route("/")
