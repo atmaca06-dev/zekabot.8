@@ -33,6 +33,7 @@ def index():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+
 data = request.get_json()
 gelen_mesaj = data.get("Body")
 if gelen_mesaj:
