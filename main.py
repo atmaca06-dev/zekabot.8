@@ -1,68 +1,41 @@
-import threading
 from flask import Flask, request, jsonify
-import openai
-import os
 from dotenv import load_dotenv
+import os
+from openai import OpenAI
 
-# Ortam değişkenlerini yükle (.env dosyasından)
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
 
-# Flask uygulaması
 app = Flask(__name__)
 
-# GPT-4 (veya turbo) ile doğrudan konuşan fonksiyon
 def send_to_gpt(mesaj):
     try:
-         response = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Sen Zekabot'un denetleyici yapay zekasısın. Gelen mesajları analiz et ve yanıtla."},
+                {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et."},
                 {"role": "user", "content": mesaj}
             ]
         )
-        yanit = response["choices"][0]["message"]["content"]
+        yanit = response.choices[0].message.content
         return yanit
-
     except Exception as e:
-        print("GPT Hatası: " + str(e))  # Hata nedenini logla
+        print("GPT Hatası:", e)
         return "GPT bağlantı hatası!"
 
-# Web arayüzü kök endpoint
-@app.route("/")
-@app.route("/gpttest", methods=["GET"])
-def gpt_test():
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": "GPT bağlantı testi yapıyorum."}
-            ]
-        )
-        yanit = response['choices'][0]['message']['content']
-        return f"GPT Cevap Başarılı: {yanit}"
-    except Exception as e:
-        return f"GPT Bağlantı Hatası: {str(e)}"
-
+@app.route("/", methods=["GET"])
 def index():
-    return "Zekabot Webhook Sistemi Çalışıyor!"
-
-from flask import Response
+    return "Zekabot Webhook Sistemi Aktif!"
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
     gelen_mesaj = request.form.get("Body")
     if gelen_mesaj:
         yanit = send_to_gpt(gelen_mesaj)
-        twiml_cevap = f"""<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>{yanit}</Message>
-</Response>"""
-        return Response(twiml_cevap, mimetype="application/xml")
-    return "Mesaj alınamadı"
+        return jsonify({"reply": yanit})
+    else:
+        return "Boş mesaj alındı.", 400
 
-
-# Sunucuyu başlat
 if __name__ == "__main__":
-    threading.Thread(target=lambda: print("Zekabot webhook aktif")).start()
     app.run(host="0.0.0.0", port=10000)
