@@ -14,7 +14,7 @@ app = Flask(__name__)
 # GPT-4 (veya turbo) ile doğrudan konuşan fonksiyon
 def send_to_gpt(mesaj):
     try:
-        response = openai.ChatCompletion.create(
+         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Sen Zekabot'un denetleyici yapay zekasısın. Gelen mesajları analiz et ve yanıtla."},
