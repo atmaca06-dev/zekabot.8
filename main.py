@@ -34,11 +34,11 @@ def index():
 @app.route("/webhook", methods=["POST"])
 def webhook():
    data = request.get_json()
-    gelen_mesaj = request.form.get("Body")
+    gelen_mesaj = data.get("Body")
     if gelen_mesaj:
     yanit = send_to_gpt(gelen_mesaj)
     return jsonify ({"reply": yanit} )
-    
+    return jsonify ({"reply": "Boş mesaj geldi"} )
 
 if __name__ == "__main__":
     threading.Thread(target=lambda: print("Zekabot webhook aktif")).start()
