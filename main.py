@@ -32,14 +32,20 @@ def send_to_gpt(mesaj):
 def index():
     return "Zekabot Webhook Sistemi Çalışıyor!"
 
-# Twilio'dan gelen mesajları işleyen webhook
+from flask import Response
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     gelen_mesaj = request.form.get("Body")
     if gelen_mesaj:
         yanit = send_to_gpt(gelen_mesaj)
-        return jsonify({"reply": yanit})
-    return jsonify({"reply": "Mesaj alınamadı."})
+        twiml_cevap = f"""<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>{yanit}</Message>
+</Response>"""
+        return Response(twiml_cevap, mimetype="application/xml")
+    return "Mesaj alınamadı"
+
 
 # Sunucuyu başlat
 if __name__ == "__main__":
