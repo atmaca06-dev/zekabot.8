@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 def send_to_gpt(mesaj):
     try:
+        print("GPT'ye giden mesaj:", mesaj)  # Takip için eklendi
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -19,10 +20,12 @@ def send_to_gpt(mesaj):
             ]
         )
         yanit = response.choices[0].message.content
+        print("GPT'den gelen yanıt:", yanit)  # Takip için eklendi
         return yanit
     except Exception as e:
         print("GPT Hatası:", e)
         return "GPT bağlantı hatası!"
+
 
 @app.route("/", methods=["GET"])
 def index():
