@@ -24,8 +24,8 @@ def send_to_gpt(mesaj):
         yanit = response["choices"][0]["message"]["content"]
         return yanit
     except Exception as e:
-        print("GPT hatası:", e)
-        return "GPT bağlantı hatası!"
+    print("GPT Hatası:", e)
+    return f"GPT bağlantı hatası! Detay: {str(e)}"
 
 # Web arayüzü kök endpoint
 @app.route("/")
