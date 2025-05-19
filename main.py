@@ -12,17 +12,20 @@ app = Flask(__name__)
 
 def send_to_gpt(mesaj):
     try:
+        print("GPT'ye giden mesaj:", mesaj)  # LOG EKLENDİ
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Sen Zekabot’un kontrol motorusun. Gelen verileri analiz edip yorumla."},
+                {"role": "system", "content": "Sen Zekabot'un kontrol motorusun. Gelen verileri analiz et ve yorumla."},
                 {"role": "user", "content": mesaj}
             ]
         )
         yanit = response["choices"][0]["message"]["content"]
+        print("GPT'den gelen yanıt:", yanit)  # LOG EKLENDİ
         return yanit
     except Exception as e:
-        return f"[GPT Hatası] {str(e)}"
+        print("GPT Hatası:", e)
+        return "GPT bağlantı hatası!"
 
 @app.route("/")
 def index():
