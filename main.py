@@ -13,19 +13,20 @@ app = Flask(__name__)
 
 # GPT-4 (veya turbo) ile doğrudan konuşan fonksiyon
 def send_to_gpt(mesaj):
-try:
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Sen Zekabot'un kontrol motorusun. Gelen verileri analiz edip yorumla."},
-            {"role": "user", "content": mesaj}
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Sen Zekabot'un denetleyici yapay zekasısın. Gelen mesajları analiz et ve yanıtla."},
+                {"role": "user", "content": mesaj}
             ]
         )
         yanit = response["choices"][0]["message"]["content"]
         return yanit
-except Exception as e:
-    print("GPT Hatası:", e)
-    return f"GPT bağlantı hatası! Detay: {str(e)}"
+
+    except Exception as e:
+        print("GPT Hatası: " + str(e))  # Hata nedenini logla
+        return "GPT bağlantı hatası!"
 
 # Web arayüzü kök endpoint
 @app.route("/")
