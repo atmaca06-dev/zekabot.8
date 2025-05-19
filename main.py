@@ -23,7 +23,7 @@ def send_to_gpt(mesaj):
         )
         yanit = response["choices"][0]["message"]["content"]
         return yanit
-    except Exception as e:
+except Exception as e:
     print("GPT Hatası:", e)
     return f"GPT bağlantı hatası! Detay: {str(e)}"
 
