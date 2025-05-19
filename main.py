@@ -1,9 +1,8 @@
-import os
 from flask import Flask, request, jsonify
-from openai import OpenAI
+import os
 from dotenv import load_dotenv
+from openai import OpenAI
 
-# Ortam değişkenini yükle (Render ortamında .env yoksa bile sorun olmaz)
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
@@ -16,7 +15,7 @@ def send_to_gpt(mesaj):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et."},
+                {"role": "system", "content": "Zekabot'sun. Gelen mesajı yorumla ve düzgün cevapla."},
                 {"role": "user", "content": mesaj}
             ]
         )
@@ -33,10 +32,14 @@ def index():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+    print("Webhook'a istek geldi.")
+    print("İstek içeriği:", request.form)
     gelen_mesaj = request.form.get("Body")
     if gelen_mesaj:
         yanit = send_to_gpt(gelen_mesaj)
-        return jsonify({"reply": yanit})
-    return "Mesaj alınamadı", 400
+        return yanit
+    return "Mesaj alınamadı!", 400
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
