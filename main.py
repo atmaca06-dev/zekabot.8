@@ -34,11 +34,15 @@ def index():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     gelen_mesaj = request.form.get("Body")
+    print("Gelen mesaj:", gelen_mesaj)  # Debug satırı
     if gelen_mesaj:
         yanit = send_to_gpt(gelen_mesaj)
+        print("Dönen yanıt:", yanit)  # Debug satırı
         return jsonify({"reply": yanit})
     else:
+        print("Boş mesaj alındı.")
         return "Boş mesaj alındı.", 400
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
