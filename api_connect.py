@@ -4,7 +4,8 @@ import openai
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
-openai.api_key = api_key  # doğru tanım
+openai.api_key = api_key
+
 
 def send_to_gpt(mesaj):
     try:
