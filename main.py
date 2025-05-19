@@ -30,6 +30,20 @@ def send_to_gpt(mesaj):
 
 # Web arayüzü kök endpoint
 @app.route("/")
+@app.route("/gpttest", methods=["GET"])
+def gpt_test():
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": "GPT bağlantı testi yapıyorum."}
+            ]
+        )
+        yanit = response['choices'][0]['message']['content']
+        return f"GPT Cevap Başarılı: {yanit}"
+    except Exception as e:
+        return f"GPT Bağlantı Hatası: {str(e)}"
+
 def index():
     return "Zekabot Webhook Sistemi Çalışıyor!"
 
