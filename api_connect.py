@@ -11,7 +11,7 @@ def send_to_gpt(mesaj):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et"},
+                {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et."},
                 {"role": "user", "content": mesaj}
             ]
         )
