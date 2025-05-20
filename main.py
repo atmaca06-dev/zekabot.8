@@ -17,5 +17,5 @@ def webhook():
     except Exception as e:
         return jsonify({"hata": str(e)}), 500
 
-if _name_ == "_main_":
+if _name_ == "__main__":
     app.run(host="0.0.0.0", port=10000)
