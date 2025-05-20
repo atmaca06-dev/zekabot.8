@@ -4,20 +4,21 @@ import os
 import openai
 from twilio.twiml.messaging_response import MessagingResponse
 
-# Çevre değişkeni yükle
+# Ortam değişkenlerini yükle
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=api_key)
 
 app = Flask(__name__)
 
+# GPT’ye mesaj gönderme fonksiyonu
 def send_to_gpt(mesaj):
     try:
-        print("GPT'ye gönderilen mesaj:", mesaj)
+        print("GPT’ye gönderilen mesaj:", mesaj)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et."},
+                {"role": "system", "content": "Zekabot'un kontrol motorusun. Kullanıcının mesajını analiz et ve doğal bir yanıt üret."},
                 {"role": "user", "content": mesaj}
             ]
         )
@@ -28,10 +29,12 @@ def send_to_gpt(mesaj):
         print("GPT Hatası:", e)
         return "GPT bağlantı hatası!"
 
+# Web arayüzü testi
 @app.route("/", methods=["GET"])
 def index():
     return "Zekabot Webhook Sistemi Aktif!"
 
+# Webhook ile gelen mesajı karşıla
 @app.route("/webhook", methods=["POST"])
 def webhook():
     gelen_mesaj = request.form.get("Body")
@@ -39,9 +42,10 @@ def webhook():
 
     yanit = send_to_gpt(gelen_mesaj)
 
-    twiml_cevap = MessagingResponse()
-    twiml_cevap.message(yanit)
-    return str(twiml_cevap)
+    cevap = MessagingResponse()
+    cevap.message(yanit)
+    return str(cevap)
 
+# Uygulama çalıştırma
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
