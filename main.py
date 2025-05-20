@@ -1,12 +1,21 @@
+from flask import Flask, request, jsonify
 from api_connect import send_to_gpt
-from web_analysis import analiz_yap
 
-# GPT yanıtı
-mesaj = "Zekabot hazır mısın?"
-yanit = send_to_gpt(mesaj)
-print("[GPT Yanıtı]:", yanit)
+app = Flask(_name_)
 
-# Web veri analizi örneği
-url = "https://www.bbc.com/news"
-analiz = analiz_yap(url)
-print("\n[Web Analizi]:", analiz)
+@app.route("/", methods=["GET"])
+def index():
+    return "Zekabot Webhook Sistemi Aktif!"
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    try:
+        data = request.get_json()
+        mesaj = data.get("message", "")
+        yanit = send_to_gpt(mesaj)
+        return jsonify({"yanit": yanit})
+    except Exception as e:
+        return jsonify({"hata": str(e)}), 500
+
+if _name_ == "_main_":
+    app.run(host="0.0.0.0", port=10000)
