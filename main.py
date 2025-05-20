@@ -10,6 +10,7 @@ def index():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+    print("Tüm veri:", request.form.to_dict())
     gelen_mesaj = request.form.get("Body")
     print("Gelen mesaj:", gelen_mesaj)  # Takip için
 
