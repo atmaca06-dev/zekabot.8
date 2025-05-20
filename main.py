@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from api_connect import send_to_gpt
 
-if = Flask(__name__)
+if __name__="__main__":
 
 @app.route("/", methods=["GET"])
 def index():
