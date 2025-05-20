@@ -9,7 +9,7 @@ client = OpenAI(api_key=api_key)
 def send_to_gpt(mesaj):
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "Zekabot'un kontrol motorusun. Gelen verileri analiz et."},
                 {"role": "user", "content": mesaj}
