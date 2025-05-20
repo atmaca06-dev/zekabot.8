@@ -10,18 +10,17 @@ def index():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    print("Tüm veri:", request.form.to_dict())  # Takip için
+    print("Tüm veri:", request.form.to_dict())  # TAKİP 1
     gelen_mesaj = request.form.get("Body")
-    print("Gelen mesaj:", gelen_mesaj)  # Takip için
+    print("Gelen mesaj:", gelen_mesaj)          # TAKİP 2
 
     if gelen_mesaj:
         yanit = send_to_gpt(gelen_mesaj)
-        print("Gönderilen yanıt:", yanit)  # Takip için
+        print("Gönderilen yanıt:", yanit)       # TAKİP 3
         return jsonify({"reply": yanit})
     else:
         print("Gelen mesaj boş!")
         return "Mesaj alınamadı", 400
-
 if __name__ == "__main__":
     threading.Thread(target=lambda: print("Zekabot webhook aktif")).start()
     app.run(host="0.0.0.0", port=10000)
