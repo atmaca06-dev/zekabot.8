@@ -1,11 +1,3 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
-
 def send_to_gpt(mesaj):
     try:
         response = client.chat.completions.create(
@@ -16,6 +8,7 @@ def send_to_gpt(mesaj):
             ]
         )
         yanit = response.choices[0].message.content
-        return yanit
+        model_adi = response.model  # kullanılan modeli alıyoruz
+        return f"Yanıt: {yanit}\nModel: {model_adi}"
     except Exception as e:
         return f"GPT Hatası: {str(e)}"
