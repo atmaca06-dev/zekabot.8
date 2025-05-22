@@ -70,9 +70,14 @@ def webhook():
     command = gpt_command_parser(msg)
     action = command.get("action", "")
 
-    # Cevap stringini üret
     if action == "bilinmiyor":
         cevap = "Komut anlaşılamadı veya bilinmiyor."
+    else:
+        cevap = "İşlem başarılı!"
+
+    # Twilio ile cevap gönderme kodları buraya
+    return "OK", 200   # <-- SADECE fonksiyonun içinde!
+
     elif action == "kod_test":
         kod = command.get("kod", "")
         cevap = test_code(kod)
@@ -91,7 +96,6 @@ def webhook():
         from_=twilio_number,
         to=sender
     )
-    return "OK", 200
 
 # Ana sayfa test
 @app.route("/", methods=["GET"])
