@@ -72,12 +72,6 @@ def webhook():
 
     if action == "bilinmiyor":
         cevap = "Komut anlaşılamadı veya bilinmiyor."
-    else:
-        cevap = "İşlem başarılı!"
-
-    # Twilio ile cevap gönderme kodları buraya
-    return "OK", 200   # <-- SADECE fonksiyonun içinde!
-
     elif action == "kod_test":
         kod = command.get("kod", "")
         cevap = test_code(kod)
@@ -90,12 +84,16 @@ def webhook():
         cevap = scrape_site(site, query)
     else:
         cevap = "Tanımsız komut."
+
     # Twilio üzerinden cevap gönder
     twilio_client.messages.create(
         body=cevap,
         from_=twilio_number,
         to=sender
     )
+
+    return "OK", 200  # <-- En sonda, fonksiyon bloğu içinde!
+
 
 # Ana sayfa test
 @app.route("/", methods=["GET"])
